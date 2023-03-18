@@ -39,10 +39,10 @@ export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EP
 prepare() {
   cd $_srcname
 
-  echo "Setting version..."
-  scripts/setlocalversion --save-scmversion
-  echo "-$pkgrel" > localversion.10-pkgrel
-  echo "${pkgbase#linux}" > localversion.20-pkgname
+  #echo "Setting version..."
+  #scripts/setlocalversion --save-scmversion
+  #echo "-$pkgrel" > localversion.10-pkgrel
+  #echo "${pkgbase#linux}" > localversion.20-pkgname
 
   local src
   for src in "${source[@]}"; do
