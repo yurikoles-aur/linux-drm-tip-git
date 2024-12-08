@@ -6,13 +6,14 @@
 #
 
 pkgbase=linux-drm-tip-git
-pkgver=6.8.r1249554.18a9fefd9e05
+pkgver=6.13.r1323880.21f6d267c4a3
 pkgrel=1
 pkgdesc='Linux kernel with bleeding-edge GPU drivers'
-url=https://cgit.freedesktop.org/drm-tip
+url=https://gitlab.freedesktop.org/drm/tip
+_product="${pkgbase%-git}"
 _branch=drm-tip
 arch=(x86_64)
-license=(GPL2)
+license=(GPL-2.0-only)
 makedepends=(
   bc
   cpio
@@ -29,18 +30,22 @@ makedepends=(
   graphviz
   imagemagick
   python-sphinx
+  python-yaml
   texlive-latexextra
 )
-options=('!strip')
+options=(
+  !debug
+  !strip
+)
 _srcname=$pkgbase
 source=(
-  "$_srcname::git://anongit.freedesktop.org/drm-tip#branch=#branch=$_branch"
+  "$_srcname::git+${url}.git#branch=$_branch"
   config  # the main kernel config file
 )
 sha256sums=('SKIP'
-            '44ab14648c0036d070fe290c18f6dd928f29b5352b50655ad96c354f428955ca')
+            'ff43e39ced765b49aa756c6a6f510cefb0435455ce6527eef50a3733c871631f')
 b2sums=('SKIP'
-        '526e6a5dc674218466d7596c8b96e219bb8a17b8a1e676c95e8d67ff3c507cc9a91e5e0c624d86ae207753f66525eaed77ce526d06186cb9d9e448116cb1bacb')
+        '834704b394e78afd696450bdefd6bb0c8a2ac54fe598d7c771bd21874c0c6e78f02d4e18f033461aa026b39f316aead95385212d74c9ba2993611eb0c0587a2f')
 
 pkgver() {
   cd $_srcname
@@ -84,6 +89,7 @@ prepare() {
 build() {
   cd $_srcname
   make all
+  make -C tools/bpf/bpftool vmlinux.h feature-clang-bpf-co-re=1
   make htmldocs
 }
 
@@ -95,8 +101,9 @@ _package() {
     kmod
   )
   optdepends=(
-    'wireless-regdb: to set the correct wireless channels of your country'
     'linux-firmware: firmware images needed for some devices'
+    'scx-scheds: to use sched-ext schedulers'
+    'wireless-regdb: to set the correct wireless channels of your country'
   )
   provides=(
     KSMBD-MODULE
@@ -136,10 +143,11 @@ _package-headers() {
 
   echo "Installing build files..."
   install -Dt "$builddir" -m644 .config Makefile Module.symvers System.map \
-    localversion.* version vmlinux
+    localversion.* version vmlinux tools/bpf/bpftool/vmlinux.h
   install -Dt "$builddir/kernel" -m644 kernel/Makefile
   install -Dt "$builddir/arch/x86" -m644 arch/x86/Makefile
   cp -t "$builddir" -a scripts
+  ln -srt "$builddir" "$builddir/scripts/gdb/vmlinux-gdb.py"
 
   # required when STACK_VALIDATION is enabled
   install -Dt "$builddir/tools/objtool" tools/objtool/objtool
@@ -228,7 +236,6 @@ _package-docs() {
   ln -sr "$builddir/Documentation" "$pkgdir/usr/share/doc/$pkgbase"
 }
 
-_product="${pkgbase%-git}"
 pkgname=(
   "${_product}-git"
   "${_product}-headers-git"
