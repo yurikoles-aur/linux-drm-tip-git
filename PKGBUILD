@@ -6,7 +6,7 @@
 #
 
 pkgbase=linux-drm-tip-git
-pkgver=6.13.r1323880.21f6d267c4a3
+pkgver=6.13.r1324853.5d7b353aa4c1
 pkgrel=1
 pkgdesc='Linux kernel with bleeding-edge GPU drivers'
 url=https://gitlab.freedesktop.org/drm/tip
@@ -43,9 +43,9 @@ source=(
   config  # the main kernel config file
 )
 sha256sums=('SKIP'
-            'ff43e39ced765b49aa756c6a6f510cefb0435455ce6527eef50a3733c871631f')
+            '02dbfa8936028f2d1a4bdca3387bf3a45bd572903d889b5795a1d722b63f27ab')
 b2sums=('SKIP'
-        '834704b394e78afd696450bdefd6bb0c8a2ac54fe598d7c771bd21874c0c6e78f02d4e18f033461aa026b39f316aead95385212d74c9ba2993611eb0c0587a2f')
+        'f59e032ce00fb871ed527b0cd45c8787abd829645012aca4385c000a98c027e53e7ff033bf0154551d43e144c37bd821159aa52ad4a9c1059233e7d1183720ba')
 
 pkgver() {
   cd $_srcname
