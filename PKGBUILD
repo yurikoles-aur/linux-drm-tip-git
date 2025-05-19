@@ -6,7 +6,7 @@
 #
 
 pkgbase=linux-drm-tip-git
-pkgver=6.14.r1336922.f2a2bd676bde
+pkgver=6.15.r1355055.36da6a9300fc
 pkgrel=1
 pkgdesc='Linux kernel with bleeding-edge GPU drivers'
 url=https://gitlab.freedesktop.org/drm/tip
@@ -23,6 +23,9 @@ makedepends=(
   pahole
   perl
   python
+  rust
+  rust-bindgen
+  rust-src
   tar
   xz
 
@@ -43,9 +46,9 @@ source=(
   config  # the main kernel config file
 )
 sha256sums=('SKIP'
-            '9a195bc4d8b492b0f44da392689746f605ca946e4f396bbc25fdbffb383899c1')
+            '878b2ee916ba6c1b3a1f1f9d9d368d9a2391bb58f71b7e52371cbb436ed2eac4')
 b2sums=('SKIP'
-        'eedd98ed226561af9b279b931d5251974ed98cf21fa0974a855dd0365a16d6702f190dc60eca9bb337534110d94d070e7c7bc5cd61ba774ab38d441b567cce6c')
+        '66f7f19fdbdc8d60e99ff3c9a242b61ccd697dd886a16e9fd43d7ea4b61b2afd6d4cbf7749b239b96181d8606bbd7b99b50179dc01b0cc346b7e7018e409b073')
 
 pkgver() {
   cd $_srcname
@@ -107,6 +110,7 @@ _package() {
   )
   provides=(
     KSMBD-MODULE
+    NTSYNC-MODULE
     VIRTUALBOX-GUEST-MODULES
     WIREGUARD-MODULE
   )
@@ -176,6 +180,14 @@ _package-headers() {
 
   echo "Installing KConfig files..."
   find . -name 'Kconfig*' -exec install -Dm644 {} "$builddir/{}" \;
+
+  echo "Installing Rust files..."
+  install -Dt "$builddir/rust" -m644 rust/*.rmeta
+  install -Dt "$builddir/rust" rust/*.so
+
+  echo "Installing unstripped VDSO..."
+  make INSTALL_MOD_PATH="$pkgdir/usr" vdso_install \
+    link=  # Suppress build-id symlinks
 
   echo "Removing unneeded architectures..."
   local arch

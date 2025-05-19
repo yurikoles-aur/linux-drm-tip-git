@@ -1,6 +1,6 @@
 pkgbase = linux-drm-tip-git
 	pkgdesc = Linux kernel with bleeding-edge GPU drivers
-	pkgver = 6.14.r1336922.f2a2bd676bde
+	pkgver = 6.15.r1355055.36da6a9300fc
 	pkgrel = 1
 	url = https://gitlab.freedesktop.org/drm/tip
 	arch = x86_64
@@ -13,6 +13,9 @@ pkgbase = linux-drm-tip-git
 	makedepends = pahole
 	makedepends = perl
 	makedepends = python
+	makedepends = rust
+	makedepends = rust-bindgen
+	makedepends = rust-src
 	makedepends = tar
 	makedepends = xz
 	options = !debug
@@ -20,9 +23,9 @@ pkgbase = linux-drm-tip-git
 	source = linux-drm-tip-git::git+https://gitlab.freedesktop.org/drm/tip.git#branch=drm-tip
 	source = config
 	sha256sums = SKIP
-	sha256sums = 9a195bc4d8b492b0f44da392689746f605ca946e4f396bbc25fdbffb383899c1
+	sha256sums = 878b2ee916ba6c1b3a1f1f9d9d368d9a2391bb58f71b7e52371cbb436ed2eac4
 	b2sums = SKIP
-	b2sums = eedd98ed226561af9b279b931d5251974ed98cf21fa0974a855dd0365a16d6702f190dc60eca9bb337534110d94d070e7c7bc5cd61ba774ab38d441b567cce6c
+	b2sums = 66f7f19fdbdc8d60e99ff3c9a242b61ccd697dd886a16e9fd43d7ea4b61b2afd6d4cbf7749b239b96181d8606bbd7b99b50179dc01b0cc346b7e7018e409b073
 
 pkgname = linux-drm-tip-git
 	pkgdesc = The Linux kernel with bleeding-edge GPU drivers kernel and modules
@@ -33,6 +36,7 @@ pkgname = linux-drm-tip-git
 	optdepends = scx-scheds: to use sched-ext schedulers
 	optdepends = wireless-regdb: to set the correct wireless channels of your country
 	provides = KSMBD-MODULE
+	provides = NTSYNC-MODULE
 	provides = VIRTUALBOX-GUEST-MODULES
 	provides = WIREGUARD-MODULE
 	replaces = virtualbox-guest-modules-arch
